@@ -30,7 +30,7 @@
 <script>
 import { zip } from 'ramda';
 import { mapGetters } from 'vuex';
-import ContractLink from '@/components/ContractLink.vue';
+import ContractLink from '@/components/contractLink.vue';
 import { getSantaContract } from '@/utils/web3';
 
 export default {
