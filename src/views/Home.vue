@@ -1,24 +1,30 @@
 <template lang="pug">
   v-container
-    v-row(cols='12')
-      v-btn.ma-2(outlined)
-        v-icon(left) mdi-plus
-        |  Secret Santa Event
-    v-row(cols='12')
-      v-form.full-width(v-if="state === 'registration'", ref='form', v-model='valid')
-        v-text-field(v-model='name', :rules="[v => !!v || 'Name is required']", label='Name', required)
-        v-btn.mr-4(:disabled='!valid', color='success', @click='create')
+    div.mb-4.title
+      | New Secret Santa event
+
+    div.pb-4
+      v-form.form.full-width(v-if="state === 'registration'", ref='form', v-model='valid')
+        v-text-field(v-model='name', :rules="[v => !!v || 'Common! Please give a name for this event.']", label='Event name', required)
+        v-btn.mt-5(:disabled='!valid', color='primary', @click='create')
           | Create
-      div(v-else-if="state === 'waitingForConfirmation'")
-        h3 Please confirm the transaction on MetaMask.
-      div(v-else-if="state === 'waitingForMined'")
-        h3 Please be patient while your transaction is getting Mined.
-    ContractLink(
-      v-for='(event, key) in events',
-      :key="'event'+key",
-      :event="event",
-      @removed="getEvents",
-    )
+
+      div.text-msg(v-else-if="state === 'waitingForConfirmation'")
+        v-progress-circular.ma-auto.mb-4(:size='40', color='primary', indeterminate)
+        br
+        | Please confirm the transaction on MetaMask.
+      div.text-msg(v-else-if="state === 'waitingForMined'")
+        v-progress-circular.ma-auto.mb-4(:size='40', color='primary', indeterminate)
+        br
+        | Processing your request...
+
+    div.mt-12
+      ContractLink(
+        v-for='(event, key) in events',
+        :key="'event'+key",
+        :event="event",
+        @removed="getEvents",
+      )
 </template>
 
 <script>
@@ -116,3 +122,14 @@ export default {
   },
 }
 </script>
+
+
+<style lang="scss" scoped>
+.title {
+  font-size: 24px;
+  text-align: center;
+}
+.form {
+  text-align: center;
+}
+</style>

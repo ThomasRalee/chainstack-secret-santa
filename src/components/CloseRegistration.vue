@@ -2,15 +2,23 @@
   div
     v-btn(
       v-if="state === 'default'",
-      color="primary",
+      text,
+      color='primary',
       @click="closeRegistration",
     ) Close Registration
-    div(v-else-if="state === 'waitingForConfirmation'")
-      h3 Please confirm the transaction on MetaMask.
-    div(v-else-if="state === 'waitingForMined'")
-      h3 Please be patient while your transaction is getting Mined.
+
+    div.text-msg(v-else-if="state === 'waitingForConfirmation'")
+      v-progress-circular.ma-auto.mb-4(:size='40', color='primary', indeterminate)
+      br
+      | Please confirm the transaction on MetaMask.
+
+    div.text-msg(v-else-if="state === 'waitingForMined'")
+      v-progress-circular.ma-auto.mb-4(:size='40', color='primary', indeterminate)
+      br
+      | Processing your request...
 
 </template>
+
 
 <script>
 import { mapGetters } from 'vuex';
@@ -51,3 +59,11 @@ export default {
   },
 }
 </script>
+
+
+<style lang="scss" scoped>
+.text-msg {
+  text-align: center;
+  margin-top: 1rem;
+}
+</style>

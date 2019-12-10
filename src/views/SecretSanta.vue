@@ -3,33 +3,52 @@
     v-flex(xs12)
       div(v-if="isLoading")
         v-progress-circular.ma-auto(v-if='isLoading', :size='50', color='primary', indeterminate)
-      div(v-else-if="!isOpen")
-        h3 Your secret santa is {{ secretSanta.name }}, he/she wants {{ secretSanta.wishlist }} for christmas!
+
+      div.text-msg(v-else-if="!isOpen")
+        | Your secret Santa is
+        |
+        code {{ secretSanta.name }}
+        | , he/she wants {{ secretSanta.wishlist }} for Christmas!
+
       div(v-else)
         v-form.full-width(v-if="state === 'default'", ref='form', v-model='valid')
-          v-text-field(label='Name', v-model='form.name', :rules="[v => !!v || 'Name is required']")
-          v-text-field(label='Wishlist', v-model='form.wishlist', :rules="[v => !!v || 'Wishlist is required']")
-          v-btn.mr-4(:disabled='!valid', color='success', @click='register')
-            | {{ registered ? 'Update' : 'Participate' }}
-        div(v-else-if="state === 'waitingForConfirmation'")
-          h3 Please confirm the transaction on MetaMask.
-        div(v-else-if="state === 'waitingForMined'")
-          h3 Please be patient while your transaction is getting Mined.
-        div(v-else-if="state === 'final'")
-          h3
-            | Thank you for participating {{ name }}, please be patient while
-            | waiting for other participants!
-          v-btn(@click="state = 'default'") Edit details
+          v-text-field(label='Your name', v-model='form.name', :rules="[v => !!v || 'Hey! Enter your name, please.']")
+          v-text-field(label='Wishlist', v-model='form.wishlist', :rules="[v => !!v || 'Dont forget your wishlist.']")
+          v-btn.mt-5(:disabled='!valid', color='primary', @click='register')
+            | {{ registered ? 'Update' : 'Submit' }}
+
+        div.text-msg(v-else-if="state === 'waitingForConfirmation'")
+          v-progress-circular.ma-auto.mb-4(:size='40', color='primary', indeterminate)
+          br
+          | Please confirm the transaction on MetaMask.
+
+        div.text-msg(v-else-if="state === 'waitingForMined'")
+          v-progress-circular.ma-auto.mb-4(:size='40', color='primary', indeterminate)
+          br
+          | Processing your request...
+
+        div.text-msg(v-else-if="state === 'final'")
+          | Thank you for participating,
+          |
+          code {{ name }}
+          | !
+          br
+          | Please be patient while waiting for other participants.
+          div.mt-4
+            v-btn(@click="state = 'default'", color='primary') Edit details
+
       v-progress-circular(v-else, :size='50', color='primary', indeterminate)
-      div(v-if="isOwner && isOpen")
-        CloseRegistration(
+
+      div.mt-12(v-if="isOwner && isOpen")
+        div
+          Participant(
+            v-for="(participant, key) in participants",
+            :key="'participant'+key",
+            :participant="participant",
+            @removed="checkOwner",
+          )
+        CloseRegistration.mt-8(
           @close="getSecretSanta",
-        )
-        Participant(
-          v-for="(participant, key) in participants",
-          :key="'participant'+key",
-          :participant="participant",
-          @removed="checkOwner",
         )
 </template>
 
@@ -59,6 +78,7 @@ export default {
     isOpen: true,
     registered: false,
     participants: [],
+    name: '',
     form: {
       name: null,
       wishlist: null,

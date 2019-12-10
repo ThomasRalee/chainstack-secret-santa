@@ -1,20 +1,24 @@
 <template lang="pug">
-  v-banner(single-line)
+  v-banner.event-list(single-line)
     div(v-if="state === 'default'")
       router-link(
         :to="{ name:'secretSanta', params: { id: event.contractAdress } }"
       )
         | {{ event.name }}
 
-      v-icon mdi-account-multiple
+      v-icon.ml-4 mdi-account-multiple
       b {{ event.participants }}
-    
-    p.mb-0(
-      v-else-if="state === 'waitingForConfirmation'",
-    ) Please confirm the transaction on MetaMask.
-    p.mb-0(
-      v-else-if="state === 'waitingForMined'",
-    ) Please wait for the transaction to be mined.
+
+    div.text-msg(v-else-if="state === 'waitingForConfirmation'")
+      v-progress-circular.ma-auto.mb-4(:size='40', color='primary', indeterminate)
+      br
+      | Please confirm the transaction on MetaMask.
+
+    div.text-msg(v-else-if="state === 'waitingForMined'")
+      v-progress-circular.ma-auto.mb-4(:size='40', color='primary', indeterminate)
+      br
+      | Processing your request...
+
     template(v-slot:actions)
       v-btn(
         v-if="showDelete",
@@ -22,8 +26,7 @@
         text,
         color='error',
         @click="removeContract(event.contractAdress)",
-      )
-        | Delete
+      ) Delete
 </template>
 
 <script>
@@ -78,11 +81,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-  .v-banner {
-    .v-banner__content {
-      min-height: 36px;
-    }
-  }
-</style>

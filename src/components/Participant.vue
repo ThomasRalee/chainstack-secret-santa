@@ -1,12 +1,17 @@
 <template lang="pug">
-  v-banner(single-line)
+  v-banner.event-list(single-line)
     span(v-if="state === 'default'") {{ participant.name }}
-    p.mb-0(
-      v-else-if="state === 'waitingForConfirmation'",
-    ) Please confirm the transaction on MetaMask.
-    p.mb-0(
-      v-else-if="state === 'waitingForMined'",
-    ) Please wait for the transaction to be mined.
+
+    div.text-msg(v-else-if="state === 'waitingForConfirmation'")
+      v-progress-circular.ma-auto.mb-4(:size='40', color='primary', indeterminate)
+      br
+      | Please confirm the transaction on MetaMask.
+
+    div.text-msg(v-else-if="state === 'waitingForMined'")
+      v-progress-circular.ma-auto.mb-4(:size='40', color='primary', indeterminate)
+      br
+      | Processing your request...
+
     template(v-slot:actions)
       v-btn(
         v-if="state !== 'waitingForConfirmation'",
@@ -14,11 +19,11 @@
         text,
         color='error',
         @click="removeParticipant()",
-      )
-        | Delete
+      ) Delete
 </template>
 
 <script>
+
 import { mapGetters } from 'vuex';
 
 export default {
@@ -67,3 +72,4 @@ export default {
   },
 }
 </script>
+
