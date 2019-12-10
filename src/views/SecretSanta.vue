@@ -8,7 +8,11 @@
         | Your secret Santa is
         |
         code {{ secretSanta.name }}
-        | , he/she wants {{ secretSanta.wishlist }} for Christmas!
+        | 😎, he/she wants
+        |
+        code {{ secretSanta.wishlist }}
+        |
+        | for Christmas!
 
       div(v-else)
         v-form.full-width(v-if="state === 'default'", ref='form', v-model='valid')

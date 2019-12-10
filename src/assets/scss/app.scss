@@ -2,6 +2,28 @@
   width: 100%;
 }
 
+#santa {
+  text-align: right;
+  display: flex;
+  align-items: flex-end;
+
+  .santa {
+    height: 100px;
+    display: block;
+    margin-left: auto;
+    filter: drop-shadow(6px -3px 3px #fffa);
+  }
+
+  span {
+    color: #fff;
+    font-size: 64px;
+    flex: 1 0 auto;
+    font-weight: 800;
+    line-height: 28px;
+    filter: drop-shadow(3px -1px 2px #fffa);
+  }
+}
+
 
 
 // SNOW **************************************
@@ -28,7 +50,7 @@ $col-ground: #f6f9fa;
 	top: 0;
 	left: 0;
 	pointer-events: none;
-	z-index: 20;
+	// z-index: 20;
 
   .main-text {
     padding: 20vh 20px 0 20px;
@@ -200,10 +222,10 @@ $col-ground: #f6f9fa;
 }
 .v-btn--contained {
   box-shadow: none;
+  &:active {
+    box-shadow: none;
+  }
 }
-
-
-
 
 
 html {

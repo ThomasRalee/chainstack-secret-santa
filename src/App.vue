@@ -1,6 +1,10 @@
 <template lang="pug">
   v-app
     canvas.snow#snow
+    div#santa
+      span Secret Santa
+      img.santa(src="https://image.flaticon.com/icons/svg/667/667619.svg")
+
     v-container.app-container(:class="{ 'fill-height': isLoading }")
       div.app-logo
         | Powered by
