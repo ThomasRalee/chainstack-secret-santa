@@ -53,7 +53,7 @@ export default {
     }),
 
     showDelete() {
-      return this.event.owner === this.account && this.event.isOpen && this.state !== 'waitingForConfirmation';
+      return this.event.isOpen && this.state !== 'waitingForConfirmation';
     },
   },
 
@@ -63,7 +63,7 @@ export default {
       const onSubmit = error => this.state = error ? 'default' : 'waitingForMined';
 
       await this.contract()
-        .methods.deleteParticpant(address)
+        .methods.removeSecretSantaEvent(address)
         .send({
           gas: 3000000,
           from: this.account,
